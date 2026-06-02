@@ -127,6 +127,22 @@ def cmd_edit(args):
     return result
 
 
+def cmd_edit_pro(args):
+    """百万剪辑狮风格剪辑 - 节奏随故事动"""
+    from ai_editor_pro import AIEditorPro
+
+    editor = AIEditorPro()
+    result = editor.edit(
+        video_path=args.video,
+        bgm_path=args.bgm,
+        output_dir=args.output,
+        target_duration=args.duration,
+        style=args.style,
+        export_jianying=not args.no_jianying,
+    )
+    return result
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Video Studio — 一站式视频制作",
@@ -243,6 +259,21 @@ def main():
     edit_parser.add_argument("--output", default="E:/", help="输出目录")
     edit_parser.add_argument("--no-jianying", action="store_true", help="不导出剪映草稿")
 
+    # ===== edit-pro 子命令 (百万剪辑狮风格) =====
+    editpro_parser = subparsers.add_parser(
+        "edit-pro",
+        help="百万剪辑狮风格剪辑",
+        description="节奏随故事动，围绕内容和旋律剪辑",
+    )
+    editpro_parser.add_argument("video", help="视频素材路径")
+    editpro_parser.add_argument("bgm", help="BGM音频路径")
+    editpro_parser.add_argument("--output", default="E:/", help="输出目录")
+    editpro_parser.add_argument("--duration", type=float, default=30, help="目标时长(秒)")
+    editpro_parser.add_argument("--style", default="auto",
+                                choices=["auto", "cinematic", "vlog", "ghoul"],
+                                help="风格 (默认: auto)")
+    editpro_parser.add_argument("--no-jianying", action="store_true", help="不导出剪映草稿")
+
     args = parser.parse_args()
 
     if not args.mode:
@@ -261,6 +292,8 @@ def main():
         cmd_jianying(args)
     elif args.mode == "edit":
         cmd_edit(args)
+    elif args.mode == "edit-pro":
+        cmd_edit_pro(args)
 
 
 if __name__ == "__main__":
