@@ -48,6 +48,7 @@ python ~/.claude/skills/video-studio/scripts/video_studio.py pipeline \
 | 📝 SRT 导出 | ✅ | ✅ |
 | 📄 纯文本文稿 | ✅ | ✅ |
 | 🎞️ 自动打开剪映 | ✅ | ✅ |
+| 🔊 TTS 语音合成 | ✅ | ✅ |
 | 🎬 素材采集分析 | - | ✅ |
 | 🎯 风格自动识别 | - | ✅ |
 | 📚 参考博主学习 | - | ✅ |
@@ -55,6 +56,23 @@ python ~/.claude/skills/video-studio/scripts/video_studio.py pipeline \
 | 🎵 BGM 智能匹配 | - | ✅ |
 | ✂️ FFmpeg 剪辑合成 | - | ✅ |
 | 🤖 AI 视频补全 | - | ✅ (可选) |
+
+### 3️⃣ TTS 语音合成
+
+生成中文旁白音频，支持多种语音和语速调节。
+
+```bash
+# 生成旁白
+python ~/.claude/skills/video-studio/scripts/tts_engine.py "大家好，欢迎观看" -o narration.mp3
+
+# 选择语音
+python ~/.claude/skills/video-studio/scripts/tts_engine.py "测试内容" -v xiaoxiao
+
+# 调节语速
+python ~/.claude/skills/video-studio/scripts/tts_engine.py "快速旁白" -r "+20%"
+
+# 可用语音: yunxi(男), yunjian(成熟男), xiaoxiao(女), xiaoyi(活泼女)
+```
 
 ## 配置
 
