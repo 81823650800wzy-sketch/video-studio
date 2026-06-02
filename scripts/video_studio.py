@@ -109,6 +109,24 @@ def cmd_jianying(args):
     return result
 
 
+def cmd_edit(args):
+    """AI全自动剪辑模式"""
+    from ai_editor import AutoEditor
+
+    editor = AutoEditor()
+    result = editor.auto_edit(
+        task=args.task,
+        video_paths=args.videos,
+        reference_url=args.reference,
+        bgm_path=args.bgm,
+        style_preset=args.style,
+        target_duration=args.duration,
+        output_dir=args.output,
+        export_jianying=not args.no_jianying,
+    )
+    return result
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Video Studio — 一站式视频制作",
@@ -210,6 +228,21 @@ def main():
     jianying_parser.add_argument("--bgm", help="BGM音频文件路径")
     jianying_parser.add_argument("--name", help="草稿名称")
 
+    # ===== edit 子命令 (AI全自动剪辑) =====
+    edit_parser = subparsers.add_parser(
+        "edit",
+        help="AI全自动剪辑",
+        description="一句话描述需求，AI自动完成全部剪辑工作",
+    )
+    edit_parser.add_argument("task", help="剪辑任务描述（如'电影混剪'、'vlog日常'）")
+    edit_parser.add_argument("--videos", nargs="*", default=[], help="本地视频路径")
+    edit_parser.add_argument("--reference", help="参考视频URL")
+    edit_parser.add_argument("--bgm", help="BGM音频路径")
+    edit_parser.add_argument("--style", help="风格预设")
+    edit_parser.add_argument("--duration", type=float, default=30, help="目标时长(秒)")
+    edit_parser.add_argument("--output", default="E:/", help="输出目录")
+    edit_parser.add_argument("--no-jianying", action="store_true", help="不导出剪映草稿")
+
     args = parser.parse_args()
 
     if not args.mode:
@@ -226,6 +259,8 @@ def main():
         cmd_tts(args)
     elif args.mode == "jianying":
         cmd_jianying(args)
+    elif args.mode == "edit":
+        cmd_edit(args)
 
 
 if __name__ == "__main__":
