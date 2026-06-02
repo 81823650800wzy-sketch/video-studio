@@ -5,7 +5,7 @@
   "caption": {
     "model": "small",
     "language": "zh",
-    "output_dir": "C:/Users/37682/video-studio-test/处理后",
+    "output_dir": "E:/",
     "jianying_path": "C:/Users/37682/AppData/Local/JianyingPro/Apps/10.2.0.13877/JianyingPro.exe",
     "subtitle_style": {
       "font_size": 20,
@@ -26,9 +26,9 @@
   },
 
   "pipeline": {
-    "output_drive": "C:/Users/37682/video-studio-test/",
-    "project_base_dir": "C:/Users/37682/video-studio-test/projects/",
-    "temp_dir": "C:/Users/37682/video-studio-test/temp/",
+    "output_drive": "E:/",
+    "project_base_dir": "E:/视频项目/",
+    "temp_dir": "E:/_pipeline_temp/",
     "default_style": "auto",
     "platform": "bilibili",
     "resolution": {"width": 1920, "height": 1080},
