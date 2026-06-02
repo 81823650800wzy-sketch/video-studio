@@ -96,6 +96,19 @@ def cmd_tts(args):
     return path
 
 
+def cmd_jianying(args):
+    """剪映模式 — 导出到剪映草稿"""
+    from jianying_export import export_to_jianying
+
+    result = export_to_jianying(
+        video_path=args.video,
+        srt_path=args.srt,
+        bgm_path=args.bgm,
+        draft_name=args.name,
+    )
+    return result
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Video Studio — 一站式视频制作",
@@ -186,6 +199,17 @@ def main():
     tts_parser.add_argument("-r", "--rate", default="+0%",
                             help="语速调节 (如 +10%%, -10%%)")
 
+    # ===== jianying 子命令 =====
+    jianying_parser = subparsers.add_parser(
+        "jianying",
+        help="导出到剪映草稿",
+        description="将视频导出为剪映草稿格式",
+    )
+    jianying_parser.add_argument("video", help="视频文件路径")
+    jianying_parser.add_argument("--srt", help="SRT字幕文件路径")
+    jianying_parser.add_argument("--bgm", help="BGM音频文件路径")
+    jianying_parser.add_argument("--name", help="草稿名称")
+
     args = parser.parse_args()
 
     if not args.mode:
@@ -200,6 +224,8 @@ def main():
         cmd_mashup(args)
     elif args.mode == "tts":
         cmd_tts(args)
+    elif args.mode == "jianying":
+        cmd_jianying(args)
 
 
 if __name__ == "__main__":
