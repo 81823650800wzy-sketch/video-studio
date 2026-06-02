@@ -1,0 +1,30 @@
+{
+  "name": "B站鬼畜风格",
+  "description": "参考B站鬼畜歌曲剪辑特色：重复循环、节奏卡点、夸张特效、快速剪辑",
+  "effects": ["cut", "zoom", "flash", "shake", "cut", "zoom", "flash"],
+  "editing": {
+    "avg_shot_duration": 0.8,
+    "fast_cut_ratio": 0.7,
+    "repeat_segments": true,
+    "beat_sync": true
+  },
+  "visual": {
+    "color_palette": ["#FF0000", "#00FF00", "#FFFF00", "#FF00FF"],
+    "saturation": 1.3,
+    "contrast": 1.2,
+    "brightness": 1.1
+  },
+  "audio": {
+    "speech_rate": 200,
+    "bgm_volume": 0.8,
+    "sfx_enabled": true,
+    "ducking": true
+  },
+  "transitions": ["cut", "flash", "zoom", "shake"],
+  "text_effects": {
+    "enabled": true,
+    "style": "弹幕风",
+    "font_size": 36,
+    "colors": ["white", "yellow", "red"]
+  }
+}

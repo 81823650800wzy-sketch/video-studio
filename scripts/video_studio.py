@@ -7,6 +7,8 @@ Video Studio — 一站式视频制作
 模式:
   caption  - 快速字幕处理 (原 auto-caption)
   pipeline - 完整视频生产线 (原 video-pipeline)
+  mashup   - 智能卡点混剪 (BGM高潮 + 情节冲突 + 特效)
+  tts      - TTS语音合成
 """
 
 import argparse
@@ -57,6 +59,41 @@ def cmd_pipeline(args):
         no_open=args.no_open,
     )
     return result
+
+
+def cmd_mashup(args):
+    """混剪模式 — 智能卡点混剪"""
+    from mashup_engine import run_mashup
+
+    # 加载风格配置
+    style = None
+    if args.style_config:
+        import json
+        config_path = Path(args.style_config)
+        if config_path.exists():
+            with open(config_path, "r", encoding="utf-8") as f:
+                style = json.load(f)
+
+    result = run_mashup(
+        video_paths=args.videos,
+        bgm_path=args.bgm,
+        output_path=args.output,
+        style_profile=style,
+        target_duration=args.duration,
+        generate_pr=args.pr,
+    )
+    return result
+
+
+def cmd_tts(args):
+    """TTS模式 — 语音合成"""
+    from tts_engine import generate_narration, get_audio_duration, VOICES
+
+    voice_id = VOICES.get(args.voice, {}).get("id", "zh-CN-YunxiNeural")
+    path = generate_narration(args.text, args.output, voice_id, args.rate)
+    dur = get_audio_duration(path)
+    print(f"生成完成: {path} ({dur:.1f}s)")
+    return path
 
 
 def main():
@@ -115,6 +152,40 @@ def main():
     pipe_parser.add_argument("--no-open", action="store_true",
                              help="不自动打开剪映")
 
+    # ===== mashup 子命令 =====
+    mashup_parser = subparsers.add_parser(
+        "mashup",
+        help="智能卡点混剪",
+        description="BGM高潮检测 + 情节冲突识别 + 卡点匹配 + 特效剪辑",
+    )
+    mashup_parser.add_argument("--videos", nargs="+", required=True,
+                               help="输入视频列表")
+    mashup_parser.add_argument("--bgm", required=True,
+                               help="BGM音频文件")
+    mashup_parser.add_argument("--output", default="E:/mashup_output.mp4",
+                               help="输出路径 (默认: E:/mashup_output.mp4)")
+    mashup_parser.add_argument("--duration", type=int, default=60,
+                               help="目标时长秒数 (默认: 60)")
+    mashup_parser.add_argument("--style-config", default=None,
+                               help="风格配置JSON文件")
+    mashup_parser.add_argument("--pr", action="store_true",
+                               help="生成Premiere Pro工程文件")
+
+    # ===== tts 子命令 =====
+    tts_parser = subparsers.add_parser(
+        "tts",
+        help="TTS语音合成",
+        description="生成中文旁白音频",
+    )
+    tts_parser.add_argument("text", help="要合成的文字")
+    tts_parser.add_argument("-o", "--output", default="E:/narration.mp3",
+                            help="输出文件 (默认: E:/narration.mp3)")
+    tts_parser.add_argument("-v", "--voice", default="yunxi",
+                            choices=["yunxi", "yunxia", "yunjian", "xiaoxiao", "xiaoyi"],
+                            help="语音选择 (默认: yunxi)")
+    tts_parser.add_argument("-r", "--rate", default="+0%",
+                            help="语速调节 (如 +10%%, -10%%)")
+
     args = parser.parse_args()
 
     if not args.mode:
@@ -125,6 +196,10 @@ def main():
         cmd_caption(args)
     elif args.mode == "pipeline":
         cmd_pipeline(args)
+    elif args.mode == "mashup":
+        cmd_mashup(args)
+    elif args.mode == "tts":
+        cmd_tts(args)
 
 
 if __name__ == "__main__":

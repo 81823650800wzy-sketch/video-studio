@@ -1,8 +1,8 @@
 # Video Studio — 一站式视频制作
 
-整合字幕处理和视频生产线的统一技能。支持快速字幕模式和完整视频制作流水线。
+整合字幕处理、视频生产线和智能混剪的统一技能。
 
-## 两种模式
+## 四种模式
 
 ### 1️⃣ 字幕模式 (caption)
 
@@ -56,8 +56,47 @@ python ~/.claude/skills/video-studio/scripts/video_studio.py pipeline \
 | 🎵 BGM 智能匹配 | - | ✅ |
 | ✂️ FFmpeg 剪辑合成 | - | ✅ |
 | 🤖 AI 视频补全 | - | ✅ (可选) |
+| 🎵 BGM高潮检测 | - | - | ✅ |
+| 🔥 情节冲突识别 | - | - | ✅ |
+| 🎯 智能卡点匹配 | - | - | ✅ |
+| ✨ 特效转场 | - | - | ✅ |
+| 📎 PR工程导出 | - | - | ✅ |
 
-### 3️⃣ TTS 语音合成
+### 3️⃣ 混剪模式 (mashup)
+
+智能卡点混剪：BGM高潮检测 + 情节冲突识别 + 卡点匹配 + 特效剪辑
+
+```bash
+# 基础混剪
+python ~/.claude/skills/video-studio/scripts/video_studio.py mashup \
+  --videos video1.mp4 video2.mp4 video3.mp4 \
+  --bgm music.mp3 \
+  --output E:/mashup.mp4
+
+# 指定时长 + 生成PR工程
+python ~/.claude/skills/video-studio/scripts/video_studio.py mashup \
+  --videos E:/素材/*.mp4 \
+  --bgm E:/bgm.mp3 \
+  --duration 30 \
+  --pr \
+  --output E:/鬼畜混剪.mp4
+
+# 使用风格配置
+python ~/.claude/skills/video-studio/scripts/video_studio.py mashup \
+  --videos E:/素材/*.mp4 \
+  --bgm E:/bgm.mp3 \
+  --style-config ~/.claude/skills/video-studio/styles/bilibili_ghoul.json
+```
+
+**功能特点：**
+- 🎵 BGM高潮点自动检测 (librosa节拍+能量分析)
+- 🔥 视频情节冲突识别 (场景切换+音频能量+画面运动)
+- 🎯 智能卡点匹配 (节拍对齐+片段时长匹配)
+- ✨ 多种特效 (zoom/flash/shake/fade)
+- 📎 Premiere Pro工程文件导出 (FCP XML格式)
+- 🎬 B站鬼畜风格预设
+
+### 4️⃣ TTS 语音合成
 
 生成中文旁白音频，支持多种语音和语速调节。
 
