@@ -98,13 +98,21 @@ def cmd_tts(args):
 
 def cmd_jianying(args):
     """剪映模式 — 导出到剪映草稿"""
-    from jianying_export import export_to_jianying
+    from jianying_export_pro import export_to_jianying_pro
+    import json
 
-    result = export_to_jianying(
+    # 加载切点配置
+    clips = None
+    if args.clips and Path(args.clips).exists():
+        with open(args.clips, "r", encoding="utf-8") as f:
+            clips = json.load(f)
+
+    result = export_to_jianying_pro(
         video_path=args.video,
         srt_path=args.srt,
         bgm_path=args.bgm,
         draft_name=args.name,
+        clips=clips,
     )
     return result
 
@@ -243,6 +251,7 @@ def main():
     jianying_parser.add_argument("--srt", help="SRT字幕文件路径")
     jianying_parser.add_argument("--bgm", help="BGM音频文件路径")
     jianying_parser.add_argument("--name", help="草稿名称")
+    jianying_parser.add_argument("--clips", help="切点JSON文件")
 
     # ===== edit 子命令 (AI全自动剪辑) =====
     edit_parser = subparsers.add_parser(
