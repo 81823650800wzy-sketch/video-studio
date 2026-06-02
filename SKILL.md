@@ -173,6 +173,25 @@ python ~/.claude/skills/video-studio/scripts/video_studio.py jianying video.mp4 
 
 **打开剪映即可在草稿列表中看到导出的项目。**
 
+### 7️⃣ 剪辑指南 (guide)
+
+生成详细的剪辑指南，让用户按照指南在剪映中操作。
+
+```bash
+# 生成剪辑指南
+python ~/.claude/skills/video-studio/scripts/video_studio.py guide \
+  --project "电影解说" \
+  --video E:/素材.mp4 \
+  --srt E:/字幕.srt \
+  --output E:/
+```
+
+**指南内容包括：**
+- 项目信息（时长、字幕数、切口数）
+- 操作步骤（每一步详细说明）
+- 素材搜索关键词（BGM、音效、特效）
+- 完成后的操作
+
 ## 配置
 
 编辑 `~/.claude/skills/video-studio/config.json`：

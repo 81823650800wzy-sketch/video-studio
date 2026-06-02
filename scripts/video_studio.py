@@ -166,6 +166,29 @@ def cmd_narrate(args):
     return result
 
 
+def cmd_guide(args):
+    """生成剪辑指南"""
+    from edit_guide_generator import generate_edit_guide
+    import json
+
+    # 加载决策文件
+    decisions = {}
+    if args.decisions and Path(args.decisions).exists():
+        with open(args.decisions, 'r', encoding='utf-8') as f:
+            decisions = json.load(f)
+
+    output_path = generate_edit_guide(
+        project_name=args.project,
+        video_path=args.video,
+        srt_path=args.srt or "",
+        decisions=decisions,
+        output_dir=args.output,
+    )
+
+    print(f"剪辑指南已生成: {output_path}")
+    return output_path
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Video Studio — 一站式视频制作",
@@ -310,6 +333,18 @@ def main():
     narrate_parser.add_argument("--output", default="E:/", help="输出目录")
     narrate_parser.add_argument("--name", help="剪映草稿名称")
 
+    # ===== guide 子命令 (剪辑指南) =====
+    guide_parser = subparsers.add_parser(
+        "guide",
+        help="生成剪辑指南",
+        description="生成详细的剪辑指南，让用户按照指南在剪映中操作",
+    )
+    guide_parser.add_argument("--project", required=True, help="项目名称")
+    guide_parser.add_argument("--video", required=True, help="视频文件路径")
+    guide_parser.add_argument("--srt", help="SRT字幕文件路径")
+    guide_parser.add_argument("--decisions", help="剪辑决策JSON文件")
+    guide_parser.add_argument("--output", default="E:/", help="输出目录")
+
     args = parser.parse_args()
 
     if not args.mode:
@@ -332,6 +367,8 @@ def main():
         cmd_edit_pro(args)
     elif args.mode == "narrate":
         cmd_narrate(args)
+    elif args.mode == "guide":
+        cmd_guide(args)
 
 
 if __name__ == "__main__":
