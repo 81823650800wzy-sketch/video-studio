@@ -44,7 +44,12 @@ class BGAnalyzer:
         # 1. 节拍检测
         step("检测节拍...")
         tempo, beat_frames = librosa.beat.beat_track(y=y, sr=sr)
-        self.tempo = float(tempo) if hasattr(tempo, '__len__') else tempo
+        # 处理numpy数组类型
+        import numpy as np
+        if isinstance(tempo, np.ndarray):
+            self.tempo = float(tempo[0]) if len(tempo) > 0 else 120.0
+        else:
+            self.tempo = float(tempo)
         self.beats = librosa.frames_to_time(beat_frames, sr=sr).tolist()
         ok(f"BPM: {self.tempo:.0f}, 节拍数: {len(self.beats)}")
 
