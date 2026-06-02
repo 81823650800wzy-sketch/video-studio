@@ -251,9 +251,10 @@ def detect_silences(video_path, threshold=1.5):
         "-af", f"silencedetect=noise=-30dB:d={threshold}",
         "-f", "null", "-",
     ]
-    result = subprocess.run(cmd, capture_output=True, text=True)
+    result = subprocess.run(cmd, capture_output=True)
+    stderr_text = result.stderr.decode("utf-8", errors="replace") if result.stderr else ""
     silences = []
-    for line in result.stderr.split("\n"):
+    for line in stderr_text.split("\n"):
         if "silence_start" in line:
             m = re.search(r"silence_start:\s*([\d.]+)", line)
             if m:
