@@ -151,6 +151,21 @@ def cmd_edit_pro(args):
     return result
 
 
+def cmd_narrate(args):
+    """叙事剪辑 - 以字幕为核心的电影解说剪辑"""
+    from narrative_editor import NarrativeEditor
+
+    editor = NarrativeEditor()
+    result = editor.edit(
+        srt_path=args.srt,
+        video_path=args.video,
+        bgm_path=args.bgm,
+        output_dir=args.output,
+        draft_name=args.name,
+    )
+    return result
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Video Studio — 一站式视频制作",
@@ -283,6 +298,18 @@ def main():
                                 help="风格 (默认: auto)")
     editpro_parser.add_argument("--no-jianying", action="store_true", help="不导出剪映草稿")
 
+    # ===== narrate 子命令 (叙事剪辑 - 字幕驱动) =====
+    narrate_parser = subparsers.add_parser(
+        "narrate",
+        help="叙事剪辑（字幕驱动）",
+        description="以字幕为核心的电影解说剪辑，字幕决定节奏、切口、特效",
+    )
+    narrate_parser.add_argument("srt", help="SRT字幕文件（核心驱动）")
+    narrate_parser.add_argument("video", help="视频素材路径")
+    narrate_parser.add_argument("--bgm", help="BGM音频路径")
+    narrate_parser.add_argument("--output", default="E:/", help="输出目录")
+    narrate_parser.add_argument("--name", help="剪映草稿名称")
+
     args = parser.parse_args()
 
     if not args.mode:
@@ -303,6 +330,8 @@ def main():
         cmd_edit(args)
     elif args.mode == "edit-pro":
         cmd_edit_pro(args)
+    elif args.mode == "narrate":
+        cmd_narrate(args)
 
 
 if __name__ == "__main__":
